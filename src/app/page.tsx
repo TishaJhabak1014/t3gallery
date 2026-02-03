@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import Link from "next/link";
 
 import { LatestPost } from "~/app/_components/post";
@@ -31,6 +32,7 @@ export default async function Home() {
 
 
   return (
+    <ClerkProvider>
     <main className="">
       <div className="flex flex-wrap gap-4">
 
@@ -67,5 +69,6 @@ export default async function Home() {
         ))}
       </div>
     </main>
+    </ClerkProvider>
   );
 }
