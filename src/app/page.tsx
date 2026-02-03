@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { LatestPost } from "~/app/_components/post";
+import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
 
 const mockUrls = [
@@ -19,11 +20,22 @@ const mockImages = allUrls.map((url, index) => ({
 
 export default async function Home() {
 
-  void api.post.getLatest.prefetch();
+  // void api.post.getLatest.prefetch();/
+
+  const posts = await db.query.posts.findMany();
+  console.log(posts) // server side logging not client side
+
 
   return (
     <main className="">
       <div className="flex flex-wrap gap-4">
+        {posts.map((post) => (
+          <div key={post.id} className="w-48 p-2 border rounded-xl">
+            {post.name}
+          </div>
+        ))}
+        {/* client-side */}
+        
         {mockImages.map((image) => (
           <div key={image.id} className="w-48">
             <div className="aspect-square overflow-hidden rounded-xl bg-slate-900">
