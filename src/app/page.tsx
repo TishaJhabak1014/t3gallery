@@ -4,6 +4,8 @@ import { LatestPost } from "~/app/_components/post";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
 
+export const dynamic = "force-dynamic"
+
 const mockUrls = [
   "https://media.istockphoto.com/id/2149530993/photo/digital-human-head-concept-for-ai-metaverse-and-facial-recognition-technology.jpg?s=1024x1024&w=is&k=20&c=Ob0ACggwWuFDFRgIc-SM5bLWjNbIyoREeulmLN8dhLs=",
   "https://media.istockphoto.com/id/2216822984/vector/closeup-side-view-profile-portrait-of-man-3d-voxelized-face-vector-illustration-design-for.jpg?s=1024x1024&w=is&k=20&c=jamzdCuL9GMq06E7LuFul_IPm6rsGLn6o31meEMFClo=",
