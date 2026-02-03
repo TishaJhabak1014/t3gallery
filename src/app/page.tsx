@@ -1,4 +1,4 @@
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 
 import { LatestPost } from "~/app/_components/post";
@@ -21,15 +21,35 @@ export const dynamic = "force-dynamic"
 //   url,
 // }));
 
-export default async function Home() {
-
-  // const posts = await db.query.posts.findMany();
-  // console.log(posts) // server side logging not client side
-
+export async function Images(){
   const images = await db.query.images.findMany({
     orderBy: (model, {desc}) => desc(model.id)
   });
 
+  return(
+
+    <div className="flex flex-wrap gap-4">
+
+        {[...images, ...images, ...images].map((image, index) => (
+          <div key={image.id+"-"+index} className="w-48">
+            <div className="aspect-square overflow-hidden rounded-xl bg-slate-900">
+            <img
+              src={image.url} 
+              alt="Gallery Image"
+              className="h-full w-full object-cover transition-transform hover:scale-105" 
+            />
+          </div>
+          <div>{image.name}</div>
+          </div>
+        ))}
+      </div>
+  );
+}
+
+export default async function Home() {
+
+  // const posts = await db.query.posts.findMany();
+  // console.log(posts) // server side logging not client side
 
   return (
     <ClerkProvider>
@@ -55,18 +75,13 @@ export default async function Home() {
           </div>
         ))} */}
 
-        {[...images, ...images, ...images].map((image, index) => (
-          <div key={image.id+"-"+index} className="w-48">
-            <div className="aspect-square overflow-hidden rounded-xl bg-slate-900">
-            <img
-              src={image.url} 
-              alt="Gallery Image"
-              className="h-full w-full object-cover transition-transform hover:scale-105" 
-            />
-          </div>
-          <div>{image.name}</div>
-          </div>
-        ))}
+        <SignedOut>
+          <div className="w-full text-2xl text-center">Please sign in above</div>
+        </SignedOut>
+        <SignedIn>
+          <Images/>
+        </SignedIn>
+        
       </div>
     </main>
     </ClerkProvider>

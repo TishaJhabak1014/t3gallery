@@ -12,7 +12,9 @@ export default function TopNav() {
           <UserButton />
         </SignedIn>
         <SignedOut>
-          <SignInButton className="cursor-pointer">Sign in</SignInButton>
+          <SignInButton>
+            <button className="cursor-pointer">Sign in</button>
+          </SignInButton>
         </SignedOut>
       </div>
     </nav>
