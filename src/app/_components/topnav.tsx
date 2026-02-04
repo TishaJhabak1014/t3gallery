@@ -2,12 +2,11 @@
 
 import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 // import { UploadButton } from "@uploadthing/react";
-import { UploadButton } from "~/utils/uploadthing";
-import type { OurFileRouter } from "~/app/api/uploadthing/core";
-import {useRouter} from "next/navigation";
+// import {useRouter} from "next/navigation";
+import { SimpleUploadButton } from "./simple-upload-button";
 
 export default function TopNav() {
-const router = useRouter();
+// const router = useRouter();
   return (
     <nav className="flex w-full items-center justify-between border-b p-4 text-xl font-semibold">
       <div>Gallery</div>
@@ -16,7 +15,7 @@ const router = useRouter();
         <SignedIn>
           {/* Use a flex container here to align children horizontally */}
           <div className="flex items-center gap-4">
-            <UploadButton
+            {/* <UploadButton
               endpoint="imageUploader"
               onClientUploadComplete={() => {
                 router.refresh();
@@ -24,7 +23,8 @@ const router = useRouter();
               onUploadError={(error) => {
                 alert(error.message);
               }}
-            />
+            /> */}
+            <SimpleUploadButton/>
             <UserButton />
           </div>
         </SignedIn>
