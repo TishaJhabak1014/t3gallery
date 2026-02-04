@@ -11,6 +11,7 @@ import { Geist } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import TopNav from "./_components/topnav";
 import { ClerkProvider } from "@clerk/nextjs";
+import { PostHogProvider } from "~/app/analytics/providers";
 
 export const metadata: Metadata = {
   title: "T3 Gallery",
@@ -29,6 +30,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode , modal: React.ReactNode}>) {
   return (
     <ClerkProvider>
+      <PostHogProvider>
+      
     <html lang="en">
       <NextSSRPlugin
           /**
@@ -41,13 +44,16 @@ export default function RootLayout({
         />
     <body className={`font-sans ${geist.variable} dark`}>
       
+      
         <TopNav />
         {children}
         {modal}
         <div id="modal-root" />
         <Toaster />
+        {/* </PostHogProvider> */}
     </body>
     </html>
+    </PostHogProvider>
     </ClerkProvider>
   );
 }
