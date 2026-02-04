@@ -1,6 +1,8 @@
 "use client";
 
 import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
+import { UploadButton } from "@uploadthing/react";
+import type { OurFileRouter } from "~/app/api/uploadthing/core";
 
 export default function TopNav() {
   return (
@@ -9,8 +11,19 @@ export default function TopNav() {
       {/* <div>Sign In</div> */}
       <div>
         <SignedIn>
+          <UploadButton<OurFileRouter>
+            endpoint="imageUploader"
+            onClientUploadComplete={(res) => {
+              console.log("Files:", res);
+              alert("Upload Completed");
+            }}
+            onUploadError={(error: Error) => {
+              alert(`ERROR! ${error.message}`);
+            }}
+          />
           <UserButton />
         </SignedIn>
+
         <SignedOut>
           <SignInButton>
             <button className="cursor-pointer">Sign in</button>
