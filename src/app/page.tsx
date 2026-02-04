@@ -1,31 +1,15 @@
+// src/app/page.tsx
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
-
-import { db } from "~/server/db";
-import { api, HydrateClient } from "~/trpc/server";
-
-export const dynamic = "force-dynamic";
-import { auth } from "@clerk/nextjs/server";
-import { getImages } from "~/server/queries";
 import Image from "next/image";
 
-// const mockUrls = [
-//   "https://media.istockphoto.com/id/2149530993/photo/digital-human-head-concept-for-ai-metaverse-and-facial-recognition-technology.jpg?s=1024x1024&w=is&k=20&c=Ob0ACggwWuFDFRgIc-SM5bLWjNbIyoREeulmLN8dhLs=",
-//   "https://media.istockphoto.com/id/2216822984/vector/closeup-side-view-profile-portrait-of-man-3d-voxelized-face-vector-illustration-design-for.jpg?s=1024x1024&w=is&k=20&c=jamzdCuL9GMq06E7LuFul_IPm6rsGLn6o31meEMFClo=",
-//   "https://media.istockphoto.com/id/2189167787/vector/abstract-digital-human-head-constructing-from-cubes-minimalistic-design-for-business.jpg?s=1024x1024&w=is&k=20&c=zdN5m_iWqvExj-tvBPC2GVqhyuVlfys56LlJWiqCTLs=",
-//   "https://media.istockphoto.com/id/2202041602/vector/abstract-digital-human-head-constructing-from-cubes-minimalistic-design-for-business.jpg?s=1024x1024&w=is&k=20&c=RYU2gp7jteivsFTf7TEdaipvkBe6q_PiR-rPHCxt7iY="
-// ]
+import { getImages } from "~/server/queries";
 
-// const allUrls = [...mockUrls, ...mockUrls, ...mockUrls];
+export const dynamic = "force-dynamic";
 
-// const mockImages = allUrls.map((url, index) => ({
-//   id: index + 1,
-//   url,
-// }));
-
+// Server component to fetch images
 export async function Images() {
   // const { userId } = await auth();
-
   // if (!userId) return null;
 
   // const images = await db.query.images.findMany({
@@ -35,7 +19,7 @@ export async function Images() {
 
   const images = await getImages();
 
-  if (images.length == 0)
+  if (images.length === 0)
     return (
       <div className="w-full text-center text-2xl">
         No images uploaded yet!
@@ -57,7 +41,6 @@ export async function Images() {
                 sizes="192px"
                 className="object-cover transition-transform duration-300 group-hover:scale-110"
               />
-
             </div>
           </Link>
 
@@ -71,7 +54,7 @@ export async function Images() {
   );
 }
 
-export default async function Home() {
+export default function Home() {
   // const posts = await db.query.posts.findMany();
   // console.log(posts) // server side logging not client side
 
