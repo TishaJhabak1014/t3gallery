@@ -4,8 +4,10 @@ import Link from "next/link";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 import { auth } from "@clerk/nextjs/server";
+import { getImages } from "~/server/queries";
+import Image from "next/image";
 
 // const mockUrls = [
 //   "https://media.istockphoto.com/id/2149530993/photo/digital-human-head-concept-for-ai-metaverse-and-facial-recognition-technology.jpg?s=1024x1024&w=is&k=20&c=Ob0ACggwWuFDFRgIc-SM5bLWjNbIyoREeulmLN8dhLs=",
@@ -21,59 +23,61 @@ import { auth } from "@clerk/nextjs/server";
 //   url,
 // }));
 
+export async function Images() {
+  // const { userId } = await auth();
 
-export async function Images(){
-  const { userId } = await auth();
+  // if (!userId) return null;
 
-  if (!userId) return null;
+  // const images = await db.query.images.findMany({
+  //   where: (model, { eq }) => eq(model.userId, userId),
+  //   orderBy: (model, { desc }) => desc(model.id),
+  // });
 
-  const images = await db.query.images.findMany({
-    where: (model, { eq }) => eq(model.userId, userId),
-    orderBy: (model, { desc }) => desc(model.id),
-  });
+  const images = await getImages();
 
-  if (images.length == 0) return (
-      <div className="w-full text-2xl text-center">No images uploaded yet!</div>
-  );
+  if (images.length == 0)
+    return (
+      <div className="w-full text-center text-2xl">No images uploaded yet!</div>
+    );
 
-  return(
-
-    <div className="flex flex-wrap gap-4">
-
-        {images.map((image) => (
-          <div key={image.id} className="w-48">
-            <div className="aspect-square overflow-hidden rounded-xl bg-slate-900">
-            <img
-              src={image.url} 
-              alt="Gallery Image"
-              className="h-full w-full object-cover transition-transform hover:scale-105" 
+  return (
+    /* Added justify-center to center the grid on the screen */
+    <div className="flex flex-wrap gap-4 p-4">
+      {images.map((image) => (
+        <div key={image.id} className="flex w-48 flex-col items-center">
+          {/* Added 'group' for hover and 'cursor-pointer' for the hand icon */}
+          <div className="group relative aspect-square w-full overflow-hidden rounded-xl bg-slate-900 cursor-pointer">
+            <Image
+              src={image.url}
+              alt={image.name}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
-          <div>{image.name}</div>
-          </div>
-        ))}
-      </div>
+          {/* Text is now outside the overflow-hidden container so it is visible */}
+          <div className="mt-2 text-center text-sm font-medium">{image.name}</div>
+        </div>
+      ))}
+    </div>
   );
 }
 
 export default async function Home() {
-
   // const posts = await db.query.posts.findMany();
   // console.log(posts) // server side logging not client side
 
   return (
     <ClerkProvider>
-    <main className="">
-      <div className="flex flex-wrap gap-4">
-
-        {/* {posts.map((post) => (
+      <main className="">
+        <div className="flex flex-wrap justify-center gap-4">
+          {/* {posts.map((post) => (
           <div key={post.id} className="w-48 p-2 border rounded-xl">
             {post.name}
           </div>
         ))} */}
-        {/* client-side */}
-        
-        {/* {mockImages.map((image) => (
+          {/* client-side */}
+
+          {/* {mockImages.map((image) => (
           <div key={image.id} className="w-48">
             <div className="aspect-square overflow-hidden rounded-xl bg-slate-900">
             <img 
@@ -85,15 +89,16 @@ export default async function Home() {
           </div>
         ))} */}
 
-        <SignedOut>
-          <div className="w-full text-2xl text-center">Please sign in above</div>
-        </SignedOut>
-        <SignedIn>
-          <Images/>
-        </SignedIn>
-        
-      </div>
-    </main>
+          <SignedOut>
+            <div className="w-full text-center text-2xl">
+              Please sign in above
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <Images />
+          </SignedIn>
+        </div>
+      </main>
     </ClerkProvider>
   );
 }
