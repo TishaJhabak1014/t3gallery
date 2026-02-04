@@ -1,11 +1,11 @@
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 
-import { LatestPost } from "~/app/_components/post";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
 
 export const dynamic = "force-dynamic"
+import { auth } from "@clerk/nextjs/server";
 
 // const mockUrls = [
 //   "https://media.istockphoto.com/id/2149530993/photo/digital-human-head-concept-for-ai-metaverse-and-facial-recognition-technology.jpg?s=1024x1024&w=is&k=20&c=Ob0ACggwWuFDFRgIc-SM5bLWjNbIyoREeulmLN8dhLs=",
@@ -21,17 +21,27 @@ export const dynamic = "force-dynamic"
 //   url,
 // }));
 
+
 export async function Images(){
+  const { userId } = await auth();
+
+  if (!userId) return null;
+
   const images = await db.query.images.findMany({
-    orderBy: (model, {desc}) => desc(model.id)
+    where: (model, { eq }) => eq(model.userId, userId),
+    orderBy: (model, { desc }) => desc(model.id),
   });
+
+  if (images.length == 0) return (
+      <div className="w-full text-2xl text-center">No images uploaded yet!</div>
+  );
 
   return(
 
     <div className="flex flex-wrap gap-4">
 
-        {[...images, ...images, ...images].map((image, index) => (
-          <div key={image.id+"-"+index} className="w-48">
+        {images.map((image) => (
+          <div key={image.id} className="w-48">
             <div className="aspect-square overflow-hidden rounded-xl bg-slate-900">
             <img
               src={image.url} 
