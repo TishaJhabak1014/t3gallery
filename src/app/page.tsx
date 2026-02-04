@@ -47,12 +47,14 @@ export async function Images() {
         <div key={image.id} className="flex w-48 flex-col items-center">
           {/* Added 'group' for hover and 'cursor-pointer' for the hand icon */}
           <div className="group relative aspect-square w-full overflow-hidden rounded-xl bg-slate-900 cursor-pointer">
+            <Link href={`/img/${image.id}`}>
             <Image
               src={image.url}
               alt={image.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-110"
             />
+            </Link>
           </div>
           {/* Text is now outside the overflow-hidden container so it is visible */}
           <div className="mt-2 text-center text-sm font-medium">{image.name}</div>
