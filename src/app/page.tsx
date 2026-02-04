@@ -1,4 +1,4 @@
-import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 
 import { db } from "~/server/db";
@@ -37,27 +37,34 @@ export async function Images() {
 
   if (images.length == 0)
     return (
-      <div className="w-full text-center text-2xl">No images uploaded yet!</div>
+      <div className="w-full text-center text-2xl">
+        No images uploaded yet!
+      </div>
     );
 
   return (
     /* Added justify-center to center the grid on the screen */
-    <div className="flex flex-wrap gap-4 p-4">
+    <div className="flex flex-wrap justify-center gap-4 p-4">
       {images.map((image) => (
         <div key={image.id} className="flex w-48 flex-col items-center">
           {/* Added 'group' for hover and 'cursor-pointer' for the hand icon */}
-          <div className="group relative aspect-square w-full overflow-hidden rounded-xl bg-slate-900 cursor-pointer">
-            <Link href={`/img/${image.id}`}>
-            <Image
-              src={image.url}
-              alt={image.name}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-            </Link>
-          </div>
+          <Link href={`/img/${image.id}`} className="w-full">
+            <div className="group relative aspect-square w-full overflow-hidden rounded-xl bg-slate-900 cursor-pointer">
+              <Image
+                src={image.url}
+                alt={image.name}
+                fill
+                sizes="192px"
+                className="object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+
+            </div>
+          </Link>
+
           {/* Text is now outside the overflow-hidden container so it is visible */}
-          <div className="mt-2 text-center text-sm font-medium">{image.name}</div>
+          <div className="mt-2 text-center text-sm font-medium">
+            {image.name}
+          </div>
         </div>
       ))}
     </div>
@@ -69,17 +76,18 @@ export default async function Home() {
   // console.log(posts) // server side logging not client side
 
   return (
-    <ClerkProvider>
-      <main className="">
-        <div className="flex flex-wrap justify-center gap-4">
-          {/* {posts.map((post) => (
+    <main className="">
+      <div className="flex flex-wrap justify-center gap-4">
+
+        {/* {posts.map((post) => (
           <div key={post.id} className="w-48 p-2 border rounded-xl">
             {post.name}
           </div>
         ))} */}
-          {/* client-side */}
 
-          {/* {mockImages.map((image) => (
+        {/* client-side */}
+
+        {/* {mockImages.map((image) => (
           <div key={image.id} className="w-48">
             <div className="aspect-square overflow-hidden rounded-xl bg-slate-900">
             <img 
@@ -91,16 +99,17 @@ export default async function Home() {
           </div>
         ))} */}
 
-          <SignedOut>
-            <div className="w-full text-center text-2xl">
-              Please sign in above
-            </div>
-          </SignedOut>
-          <SignedIn>
-            <Images />
-          </SignedIn>
-        </div>
-      </main>
-    </ClerkProvider>
+        <SignedOut>
+          <div className="w-full text-center text-2xl">
+            Please sign in above
+          </div>
+        </SignedOut>
+
+        <SignedIn>
+          <Images />
+        </SignedIn>
+
+      </div>
+    </main>
   );
 }

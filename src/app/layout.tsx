@@ -3,7 +3,7 @@ import "@uploadthing/react/styles.css";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "~/app/api/uploadthing/core";
-
+import { Toaster } from "../components/ui/sonner"
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
@@ -39,12 +39,13 @@ export default function RootLayout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-    <body className={`font-sans ${geist.variable}`}>
+    <body className={`font-sans ${geist.variable} dark`}>
       
         <TopNav />
         {children}
         {modal}
         <div id="modal-root" />
+        <Toaster />
     </body>
     </html>
     </ClerkProvider>
